@@ -1,16 +1,17 @@
-function numDecodings(s) {
-  const dp = new Array(s.length + 1).fill(0);
-  dp[0] = 1;
-  dp[1] = s[0] === "0" ? 0 : 1;
-  for (let i = 2; i <= s.length; i++) {
-    const oneDigit = parseInt(s.substring(i - 1, i));
-    const twoDigits = parseInt(s.substring(i - 2, i));
-    if (oneDigit >= 1) {
-      dp[i] += dp[i - 1];
+function pathSum(root, sum) {
+  if (!root) return [];
+  const result = [];
+  const path = [];
+  const traverse = (node, sum) => {
+    if (!node) return;
+    path.push(node.val);
+    if (!node.left && !node.right && sum === node.val) {
+      result.push([...path]);
     }
-    if (twoDigits >= 10 && twoDigits <= 26) {
-      dp[i] += dp[i - 2];
-    }
-  }
-  return dp[s.length];
+    traverse(node.left, sum - node.val);
+    traverse(node.right, sum - node.val);
+    path.pop();
+  };
+  traverse(root, sum);
+  return result;
 }
